@@ -1,3 +1,5 @@
+from day_one import captcha_sequence_solver
+
 def test_captcha_sequence_solver():
   cases = [
     {

@@ -6,6 +6,10 @@ def test_captcha_sequence_solver():
       'multidigit_int': 1122,
       'expected_result': 3,
     },
+    {
+      'multidigit_int': 1111,
+      'expected_result': 4,
+    },
   ]
   for case in cases:
     assert captcha_sequence_solver(case['multidigit_int']) == case['expected_result']

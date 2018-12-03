@@ -1,8 +1,13 @@
-import requests
 import itertools
+import os
+import requests
 
 URL='https://adventofcode.com/2018/day/1/input'
-COOKIES='_ga=GA1.2.1115296876.1543798028; _gid=GA1.2.2143035274.1543798028; session=53616c7465645f5f6b955b505a9a6b80358b71e3a89e1ec85fee9078ee71ad34d8eb7425b17a184d1d9ba97ae8224288'
+
+# get my user-specific cookies
+cookie_file = os.path.join(os.path.dirname(__file__), '../cookies.txt')
+with open(cookie_file, 'r') as f:
+  COOKIES=f.read()
 
 
 def get_dataset_from_url(url, cookies):

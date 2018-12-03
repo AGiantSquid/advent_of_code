@@ -4,10 +4,9 @@ import requests
 URL='https://adventofcode.com/2018/day/1/input'
 
 # get my user-specific cookies
-for cookie_file in ['cookies.txt', '../cookies.txt', '../../cookies.txt']:
-  if os.path.isfile(cookie_file):
-    with open(cookie_file, 'r') as f:
-      COOKIES=f.read()
+cookie_file = os.path.join(os.path.dirname(__file__), '../cookies.txt')
+with open(cookie_file, 'r') as f:
+  COOKIES=f.read()
 
 
 def get_dataset_from_url(url, cookies, requests=requests):

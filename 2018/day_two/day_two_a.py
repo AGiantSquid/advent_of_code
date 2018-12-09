@@ -1,23 +1,19 @@
 from collections import Counter
+from functools import reduce
+from operator import mul
 
 from day_two.day_two_test_data import EXPECTED_PAYLOAD
 from aoc_utils import get_dataset_from_url
 
-import os
-import requests
-
+def prod(list_of_ints):
+    """Prod returns the product of list of ints. This method is built into numpy,
+    but recreated here to keep imports light."""
+    return reduce(mul, list_of_ints, 1)
 
 def checksum_generator(data):
-    data_dict = {
-        2: 0,
-        3: 0,
-    }
-    for label in data:
-        totals = Counter(label)
-        for num in [2, 3]:
-            if num in totals.values():
-                data_dict[num] += 1
-    return data_dict[2] * data_dict[3]
+    # count instances of all letters in each label, return "1" for labels that have 2 of any letter, or 3 of any letter,
+    # sum the ones that have 2 and 3, then multiply them.
+    return prod([sum([1 for label in data if num in Counter(label).values()]) for num in [2,3]])
 
 
 if __name__ == '__main__':

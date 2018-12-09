@@ -1,6 +1,6 @@
 To run tests:
 ```bash
-python3 -m pytest .
+PYTHONPATH='../' python3 -m pytest day_one
 ```
 
 Challenge comes from: https://adventofcode.com/2018/day/1

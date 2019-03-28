@@ -29,17 +29,13 @@ def get_coordinates_of_last_cart(cart_file):
   initial_cart_map = load_cart_file(cart_file)
   carts = get_carts_from_cart_map(initial_cart_map)
   map_with_carts_removed = get_cart_map(initial_cart_map)
-
+  final_cart_coords = run_ticks_until_single_cart_remains(carts, map_with_carts_removed)
+  return final_cart_coords
 
 
 def load_cart_file(cart_file):
   """Return cart file divided into list of lists"""
-  return tuple([create_list_of_cart_tracks(row) for row in cart_file.splitlines()])
-
-
-def create_list_of_cart_tracks(row):
-  """Convert all spaces to None."""
-  return tuple([char if char != ' ' else None for char in row])
+  return tuple([row for row in cart_file.splitlines()])
 
 
 def get_carts_from_cart_map(cart_map):
@@ -124,19 +120,19 @@ def left_angle(cart_map, coords):
 
 
 def item_above(cart_map, coords):
-  return retrieve_by_coordinates(cart_map, coords_above(coords))
+  return retrieve_by_coordinates(cart_map, coords_above(coords)) in ['|', '+', '\\', '/']
 
 
 def item_below(cart_map, coords):
-  return retrieve_by_coordinates(cart_map, coords_below(coords))
+  return retrieve_by_coordinates(cart_map, coords_below(coords)) in ['|', '+', '\\', '/']
 
 
 def item_right(cart_map, coords):
-  return retrieve_by_coordinates(cart_map, coords_right(coords))
+  return retrieve_by_coordinates(cart_map, coords_right(coords)) in ['-', '+', '\\', '/']
 
 
 def item_left(cart_map, coords):
-  return retrieve_by_coordinates(cart_map, coords_left(coords))
+  return retrieve_by_coordinates(cart_map, coords_left(coords)) in ['-', '+', '\\', '/']
 
 
 def retrieve_by_coordinates(xymap, coordinates):
@@ -168,25 +164,65 @@ def coords_left(coords):
   return x - 1, y
 
 
+def run_ticks_until_single_cart_remains(carts, cart_map):
+  """Return coordinates of final remaining cart as tuple."""
+  moved_carts = []
+
+  while True:
+    collision_points = [cart["coords"] for cart in carts] + [cart["coords"] for cart in moved_carts if len(moved_carts)]
+
+    moved_cart = move(carts[0], cart_map)
+    if moved_cart["coords"] in collision_points:
+
+      moved_carts = [_ for _ in moved_carts if _['coords'] != moved_cart["coords"]]
+      carts = [_ for _ in carts if not _['coords'] in [carts[0]["coords"], moved_cart['coords']]]
+
+      if len(moved_carts) == 1 and len(carts) == 0:
+        return moved_carts[0]['coords']
+        break
+
+      if len(carts) == 1 and len(moved_carts) == 0:
+        return carts[0]['coords']
+        break
+
+      if len(carts):
+        continue
+
+    else:
+      moved_carts.append(moved_cart)
+
+      if len(carts) > 1:
+        carts = carts[1:]
+        continue
+
+    carts = sorted(
+      moved_carts,
+      key=lambda x: (x["coords"][0], x["coords"][1]),
+    )
+    moved_carts = []
+    continue
+
+
 def run_ticks_until_collision(carts, cart_map):
   """Run until a collision happens, then return the coordinates as tuple."""
   try:
-    recursively_call_ticks(carts, cart_map)
+    recursively_call_ticks_unless_collision(carts, cart_map)
   except CartCollision as collision:
     return collision.coordinates
 
 
-def recursively_call_ticks(carts, cart_map):
+
+def recursively_call_ticks_unless_collision(carts, cart_map):
   """"""
-  carts = do_tick(carts, cart_map)
+  carts = do_tick_unless_collision(carts, cart_map)
   sorted_unmoved_carts = sorted(
     carts,
     key=lambda x: (x["coords"][0], x["coords"][1]),
   )
-  recursively_call_ticks(sorted_unmoved_carts, cart_map)
+  recursively_call_ticks_unless_collision(sorted_unmoved_carts, cart_map)
 
 
-def do_tick(carts, cart_map):
+def do_tick_unless_collision(carts, cart_map):
   """Move each cart, and return their new positions unless a collision happens."""
   moved_carts = []
   collision_points = [cart["coords"] for cart in carts]
@@ -208,14 +244,20 @@ def move(cart, cart_map):
 
   orientation, turn_choice = get_updated_orientation(cart, next_symbol)
 
-  return Map({
+
+  return {
     "coords": coordinates,
     "orientation": orientation,
     "turn_choice": turn_choice,
-  })
+  }
 
 
 class CartCollision(Exception):
+  """Raised when two carts collide"""
+  def __init__(self, coordinates):
+    self.coordinates = coordinates
+
+class SingleCart(Exception):
   """Raised when two carts collide"""
   def __init__(self, coordinates):
     self.coordinates = coordinates
@@ -268,9 +310,17 @@ if __name__ == '__main__':
   collision_coords = get_coordinates_of_first_collision(cart_file)
   # 74,87
   last_cart_coords = get_coordinates_of_last_cart(cart_file)
+  # 29, 74
   print(collision_coords)
+  print(last_cart_coords)
 
   print(
     timeit.timeit("get_coordinates_of_first_collision(cart_file)",
     setup="""from __main__ import get_coordinates_of_first_collision, read_file
-cart_file = read_file('test_data_real.txt')""", number=1000))
+cart_file = read_file('test_data_real.txt')""", number=100))
+
+
+  print(
+    timeit.timeit("get_coordinates_of_last_cart(cart_file)",
+    setup="""from __main__ import get_coordinates_of_last_cart, read_file
+cart_file = read_file('test_data_real.txt')""", number=100))

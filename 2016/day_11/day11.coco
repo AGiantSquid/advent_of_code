@@ -1,0 +1,145 @@
+from itertools import combinations, chain, product
+
+from immutables import Map
+
+from python_utils.immutables_utils import print_map
+
+
+def has_generator(floor):
+    return any(map(x -> x[1] == 'g', floor))
+
+
+def all_chips_are_paired(floor):
+    """The chips are safe because they are paired with their generators."""
+    chips = {x[0] for x in floor if x[1] == 'm'}
+    generators = {x[0] for x in floor if x[1] == 'g'}
+    return chips.issubset(generators)
+
+
+def floor_is_safe(floor):
+    """No chips will be fried."""
+    if not floor |> has_generator:
+        return True
+    return floor |> all_chips_are_paired
+
+
+def get_possible_components_that_can_leave_the_floor(floor):
+    """Return all options of chip/genarator combinatiors that are safe to move."""
+    return map(
+        s -> frozenset(s),
+        chain(combinations(floor, 1), combinations(floor, 2)),
+    )
+
+
+def valid_floor_movements(state):
+    """Get valid floors that the elevator can travel to."""
+    return {state['elevator'] + 1, state['elevator'] - 1} & {0, 1, 2, 3}
+
+
+def get_safe_new_state(state, new_elevator, items_to_move):
+    """Return new state after items have moved to new floor if valid."""
+    new_testing_facility = tuple(
+                                    (existing_floor | items_to_move if i == new_elevator else
+                                     existing_floor - items_to_move if i == state['elevator'] else
+                                     existing_floor)
+                                     for (i, existing_floor) in enumerate(state['testing_facility'])
+                                )
+
+    both_floors_are_safe = floor_is_safe(new_testing_facility[state['elevator']]) and \
+        floor_is_safe(new_testing_facility[new_elevator])
+
+    if both_floors_are_safe:
+        return Map({
+            "elevator": new_elevator,
+            "testing_facility": new_testing_facility,
+        })
+
+
+def safe_options_to_try(state):
+    """Return the safe new states that can proceed a current state."""
+    valid_next_floors = {state['elevator'] + 1, state['elevator'] - 1} & {0, 1, 2, 3}
+    floor_to_investigate = state['testing_facility'][state['elevator']]
+    possible_components_that_can_leave_the_floor = \
+        get_possible_components_that_can_leave_the_floor(floor_to_investigate)
+    results = {
+        get_safe_new_state(state, new_elevator, items_to_move)
+        for new_elevator, items_to_move
+        in product(valid_next_floors, possible_components_that_can_leave_the_floor)
+    }
+    return filter(x -> x, results)
+
+
+def done(state):
+    return not any(state['testing_facility'][i] for i in range(3))
+
+
+def get_new_states_after_new_move(current_move_states, visited_states):
+    new_states_on_new_level = set()
+
+    for current_state in current_move_states:
+        next_states = set(safe_options_to_try(current_state))
+        for next_state in next_states:
+            if next_state in visited_states:
+                continue
+            if done(next_state):
+                return (True, next_state, visited_states)
+            visited_states = visited_states | frozenset([next_state])
+
+            new_states_on_new_level = new_states_on_new_level | frozenset([next_state])
+
+    return False, new_states_on_new_level, visited_states
+
+
+
+def get_move_count(move_count, current_move_states, visited_states, all_on_top_level):
+    if all_on_top_level:
+      return move_count
+
+    all_on_top_level, current_move_states, visited_states = \
+        get_new_states_after_new_move(current_move_states, visited_states)
+
+    return get_move_count(move_count + 1, current_move_states, visited_states, all_on_top_level)
+
+
+def get_total_moves(state):
+    move_count = 0
+    current_move_states = frozenset([state])
+    visited_states = frozenset([state])
+    all_on_top_level = False
+
+    move_count = get_move_count(move_count, current_move_states, visited_states, all_on_top_level)
+    return move_count
+
+
+def main(state):
+  total_moves = get_total_moves(state)
+  print("Finished in {} moves".format(total_moves))
+
+
+
+if __name__ == '__main__':
+  input = '''\
+The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.
+The second floor contains a hydrogen generator.
+The third floor contains a lithium generator.
+The fourth floor contains nothing relevant.
+'''
+
+  STATE = Map({
+      'testing_facility': (
+          frozenset([
+              ('hydrogen', 'm'),
+              ('lithium', 'm'),
+          ]),
+          frozenset([
+              ('hydrogen', 'g'),
+          ]),
+          frozenset([
+              ('lithium', 'g'),
+          ]),
+          frozenset([]),
+      ),
+      'elevator': 0,
+  })
+
+  main(STATE)

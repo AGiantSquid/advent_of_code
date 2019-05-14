@@ -245,11 +245,11 @@ def move(cart, cart_map):
   orientation, turn_choice = get_updated_orientation(cart, next_symbol)
 
 
-  return {
+  return Map({
     "coords": coordinates,
     "orientation": orientation,
     "turn_choice": turn_choice,
-  }
+  })
 
 
 class CartCollision(Exception):
@@ -273,6 +273,12 @@ def get_updated_coordinates(orientation, coords):
   if orientation == 3:
     return coords_left(coords)
 
+ORIENTATION_MAPPING = {
+  '^': 0,
+  '>': 1,
+  'v': 2,
+  '<': 3,
+}
 
 def get_updated_orientation(cart, next_symbol):
   new_orientation = None

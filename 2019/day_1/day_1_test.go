@@ -43,3 +43,18 @@ func TestGetRequiredFuelCompounding(t *testing.T) {
 		}
 	}
 }
+
+func TestGetRequiredFuelCompoundingRecursive(t *testing.T) {
+	mass := map[int]int{
+		14:     2,
+		1969:   966,
+		100756: 50346,
+	}
+	for k, v := range mass {
+		res := getRequiredFuelCompoundingRecursive(k)
+
+		if res != v {
+			t.Errorf("Error: Mass of %v should have produced a fuel value of %v. Received %v", k, v, res)
+		}
+	}
+}

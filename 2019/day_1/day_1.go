@@ -17,6 +17,9 @@ func main() {
 	partTwo := getRequiredFuelTotal(masses, getRequiredFuelCompounding)
 	fmt.Println(partTwo)
 
+	// Same thing as above, just with recursive strategy
+	partTwoRecursive := getRequiredFuelTotal(masses, getRequiredFuelCompoundingRecursive)
+	fmt.Println(partTwoRecursive)
 }
 
 // getRequiredFuelTotal accepts file location of module masses
@@ -72,4 +75,20 @@ func getRequiredFuelCompounding(moduleMass int) int {
 	}
 
 	return totalFuelNeeded
+}
+
+// getRequiredFuelCompoundingRecursive calculates the required fuel to launch a module
+// from its mass with fuel costs compounded, using recursive strategy
+func getRequiredFuelCompoundingRecursive(mass int) (totalFuel int) {
+	_, totalFuel = recursivelyGetRequiredFuel(mass, 0)
+	return
+}
+
+func recursivelyGetRequiredFuel(moduleMass int, totalFuelNeeded int) (int, int) {
+	fuelNeeded := (moduleMass / 3) - 2
+	if fuelNeeded < 0 {
+		return 0, totalFuelNeeded
+	}
+
+	return recursivelyGetRequiredFuel(fuelNeeded, totalFuelNeeded+fuelNeeded)
 }

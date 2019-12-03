@@ -22,9 +22,24 @@ func TestGetRequiredFuelOne(t *testing.T) {
 
 func TestGetRequiredFuelTotal(t *testing.T) {
 	masses := "test_data.txt"
-	res := getRequiredFuelTotal(masses)
+	res := getRequiredFuelTotal(masses, getRequiredFuel)
 
 	if res != 34241 {
 		t.Errorf("Error: Masses of %v should have produced a fuel value of %v", masses, res)
+	}
+}
+
+func TestGetRequiredFuelCompounding(t *testing.T) {
+	mass := map[int]int{
+		14:     2,
+		1969:   966,
+		100756: 50346,
+	}
+	for k, v := range mass {
+		res := getRequiredFuelCompounding(k)
+
+		if res != v {
+			t.Errorf("Error: Mass of %v should have produced a fuel value of %v. Received %v", k, v, res)
+		}
 	}
 }

@@ -11,14 +11,18 @@ import (
 func main() {
 	masses := "masses.txt"
 
-	result := getRequiredFuelTotal(masses)
-	fmt.Print(result)
+	partOne := getRequiredFuelTotal(masses, getRequiredFuel)
+	fmt.Print(partOne)
+
+	partTwo := getRequiredFuelTotal(masses, getRequiredFuelCompounding)
+	fmt.Println(partTwo)
+
 }
 
 // getRequiredFuelTotal accepts file location of module masses
 // it reads the contents of the file and returns the
 // total fuel required to launch them
-func getRequiredFuelTotal(filePath string) int {
+func getRequiredFuelTotal(filePath string, fuelCalculationFunc func(int) int) int {
 	result := 0
 
 	file, err := os.Open(filePath)
@@ -33,7 +37,7 @@ func getRequiredFuelTotal(filePath string) int {
 		if err != nil {
 			log.Fatal(err)
 		}
-		result += getRequiredFuel(mass)
+		result += fuelCalculationFunc(mass)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -48,4 +52,24 @@ func getRequiredFuel(mass int) int {
 	// divide by 3, round down, subtract 2
 	// since we use ints, we already have a rounded down number
 	return (mass / 3) - 2
+}
+
+// getRequiredFuelCompounding calculates the required fuel to launch a module
+// from its mass with fuel costs compounded
+func getRequiredFuelCompounding(moduleMass int) int {
+	valueIsPositive := true
+	totalFuelNeeded := 0
+
+	amountToCalculate := moduleMass
+
+	for valueIsPositive {
+		fuelNeeded := (amountToCalculate / 3) - 2
+		if fuelNeeded < 0 {
+			return totalFuelNeeded
+		}
+		totalFuelNeeded += fuelNeeded
+		amountToCalculate = fuelNeeded
+	}
+
+	return totalFuelNeeded
 }

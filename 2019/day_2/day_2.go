@@ -10,27 +10,44 @@ import (
 )
 
 func main() {
-	result := processIntCode("intcode_file.txt")
+	filePath := "intcode_file.txt"
+	result := processIntCode(filePath, 12, 2)
 	fmt.Println(result)
+
+	partTwo := bruteForce(filePath)
+	fmt.Println(partTwo)
+}
+
+func bruteForce(filePath string) int {
+	intCode := readIntCode(filePath)
+	for i := 0; i < 99; i++ {
+		for j := 0; j < 99; j++ {
+			result := processIntCodeString(intCode, i, j)
+			if result == 19690720 {
+				return i*100 + j
+			}
+		}
+	}
+	return 0
 }
 
 // processIntCode reads a file and returns the updated code values
-func processIntCode(filePath string) int {
+func processIntCode(filePath string, noun int, verb int) int {
 	intCode := readIntCode(filePath)
-	solvedIntCode := processIntCodeString(intCode)
+	solvedIntCode := processIntCodeString(intCode, noun, verb)
 	return solvedIntCode
 }
 
-func resetState(intCode *[]int) {
-	(*intCode)[1] = 12
-	(*intCode)[2] = 2
+func resetState(intCode *[]int, noun int, verb int) {
+	(*intCode)[1] = noun
+	(*intCode)[2] = verb
 }
 
 // formats the input from a string to ints to a string again
-func processIntCodeString(intCodeString string) int {
+func processIntCodeString(intCodeString string, noun int, verb int) int {
 	intCodeStringSlice := strings.Split(intCodeString, ",")
 	intCodeSlice := convertStringSliceToIntSlice(intCodeStringSlice)
-	resetState(&intCodeSlice)
+	resetState(&intCodeSlice, noun, verb)
 	solveIntCode(&intCodeSlice)
 	return intCodeSlice[0]
 }

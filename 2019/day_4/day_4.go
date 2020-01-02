@@ -9,11 +9,16 @@ import (
 func main() {
 	input := "168630-718098"
 
-	total := getTotalValidPasswordCount(input)
-	fmt.Println(total)
+	partOne := getTotalValidPasswordCount(input, validPassword1)
+	fmt.Println(partOne)
+
+	partTwo := getTotalValidPasswordCount(input, validPassword2)
+	fmt.Println(partTwo)
 }
 
-func getTotalValidPasswordCount(rangeString string) int {
+type fn func(int) bool
+
+func getTotalValidPasswordCount(rangeString string, validPassword fn) int {
 	ranges := strings.Split(rangeString, "-")[:2]
 
 	low, _ := strconv.Atoi(ranges[0])
@@ -30,10 +35,9 @@ func getTotalValidPasswordCount(rangeString string) int {
 	return validPasswordCount
 }
 
-func validPassword(input int) bool {
+func validPassword1(input int) bool {
 	s := strconv.Itoa(input)
 	twoAdjDigitsAreTheSame := false
-	digitsIncrease := true
 
 	var priorDigit rune
 
@@ -43,11 +47,53 @@ func validPassword(input int) bool {
 				twoAdjDigitsAreTheSame = true
 			}
 			if c < priorDigit {
-				digitsIncrease = false
+				return false
 			}
 		}
 		priorDigit = c
 	}
 
-	return twoAdjDigitsAreTheSame && digitsIncrease
+	return twoAdjDigitsAreTheSame
+}
+
+func validPassword2(input int) bool {
+	s := strconv.Itoa(input)
+	twoAdjDigitsFound := false
+	twoAdjDigitsAreTheSame := false
+
+	var priorDigit rune
+	adjDigit := '0'
+
+	for i, c := range(s) {
+		if i > 0 {
+			if c == priorDigit {
+				// this will happen with 3 or more in a row
+				if c == adjDigit {
+					twoAdjDigitsAreTheSame = false
+				}
+				if c != adjDigit {
+					twoAdjDigitsAreTheSame = true
+					adjDigit = c
+				}
+			}
+			if c != priorDigit && twoAdjDigitsAreTheSame {
+				twoAdjDigitsFound = true
+			}
+			if c != priorDigit {
+				// reset adjDigit
+				adjDigit = '0'
+			}
+
+			if c < priorDigit {
+				return false
+			}
+		}
+		priorDigit = c
+	}
+
+	if twoAdjDigitsFound || twoAdjDigitsAreTheSame {
+		return true
+	}
+
+	return false
 }

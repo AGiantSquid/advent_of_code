@@ -23,3 +23,23 @@ func TestProcessOrbitMapRealData(t *testing.T) {
 		t.Errorf("Error: processOrbitMap should have produced a result of %v. Observed %v", expectedResult, result)
 	}
 }
+
+func TestNavigateOrbitMap(t *testing.T) {
+	filePath := "test_data_2.txt"
+	result := navigateOrbitMap(filePath)
+	expectedResult := 4
+
+	if result != expectedResult {
+		t.Errorf("Error: processOrbitMap should have produced a result of %v. Observed %v", expectedResult, result)
+	}
+}
+
+func TestNavigateOrbitMapRealData(t *testing.T) {
+	filePath := "data.txt"
+	result := navigateOrbitMap(filePath)
+	expectedResult := 382
+
+	if result != expectedResult {
+		t.Errorf("Error: processOrbitMap should have produced a result of %v. Observed %v", expectedResult, result)
+	}
+}

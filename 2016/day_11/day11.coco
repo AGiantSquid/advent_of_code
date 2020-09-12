@@ -24,7 +24,7 @@ def floor_is_safe(floor):
 
 
 def get_possible_components_that_can_leave_the_floor(floor):
-    """Return all options of chip/genarator combinatiors that are safe to move."""
+    """Return all options of chip/generator combinations that are safe to move."""
     return map(
         s -> frozenset(s),
         chain(combinations(floor, 1), combinations(floor, 2)),

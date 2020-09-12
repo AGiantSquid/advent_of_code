@@ -1,8 +1,8 @@
 import pytest
 
-from day_one.day_one_a import get_dataset_from_url, get_end_frequency
-from day_one.day_one_b import get_repeated_frequency
-from day_one.day_one_test_data import EXPECTED_PAYLOAD
+from day_1_a import get_dataset_from_url, get_end_frequency
+from day_1_b import get_repeated_frequency
+from day_1_test_data import EXPECTED_PAYLOAD
 from test_aoc_utils import MockResponse
 
 class MockRequests:

@@ -1,7 +1,7 @@
 import pytest
 
 from aoc_utils import get_dataset_from_url
-from day_one.day_one_test_data import EXPECTED_PAYLOAD
+from day_1.day_1_test_data import EXPECTED_PAYLOAD
 
 
 class MockResponse:

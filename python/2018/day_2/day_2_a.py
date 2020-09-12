@@ -2,7 +2,7 @@ from collections import Counter
 from functools import reduce
 from operator import mul
 
-from day_two.day_two_test_data import EXPECTED_PAYLOAD
+from day_2.day_2_test_data import EXPECTED_PAYLOAD
 from aoc_utils import get_dataset_from_url
 
 def prod(list_of_ints):

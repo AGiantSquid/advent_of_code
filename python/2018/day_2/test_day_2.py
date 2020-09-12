@@ -1,6 +1,6 @@
-from day_two_a import checksum_generator
-from day_two_b import common_letters_in_correct_labels
-from day_two_test_data import EXPECTED_PAYLOAD
+from day_2_a import checksum_generator
+from day_2_b import common_letters_in_correct_labels
+from day_2_test_data import EXPECTED_PAYLOAD
 from aoc_utils import get_dataset_from_url
 
 

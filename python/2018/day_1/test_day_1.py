@@ -3,12 +3,18 @@ import pytest
 from day_1_a import get_dataset_from_url, get_end_frequency
 from day_1_b import get_repeated_frequency
 from day_1_test_data import EXPECTED_PAYLOAD
-from test_aoc_utils import MockResponse
+
+
+class MockResponse:
+  def __init__(self, expected_payload):
+    self.text = expected_payload
+
 
 class MockRequests:
-  """Mock class to make GET request."""
-  def get(self, url, cookies):
-    return MockResponse(EXPECTED_PAYLOAD)
+    """Mock class to make GET request."""
+    def get(self, url, cookies):
+        return MockResponse(EXPECTED_PAYLOAD)
+
 
 EXPECTED_FREQUENCY_LIST = get_dataset_from_url('some url', 'some cookies', MockRequests())
 

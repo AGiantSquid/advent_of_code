@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from aoc_utils import get_dataset_from_url
 
 

@@ -2,11 +2,10 @@
 '''
 Solves Advent of Code problem for day 1.
 '''
-from os.path import join, dirname
 from typing import List, Tuple
 from functools import reduce
 
-from aoc_utils import get_dataset_from_url, read_cookies_from_file
+from aoc_utils import get_aoc_data_for_challenge
 
 
 def get_product_of_entries(nums: List[str]) -> int:
@@ -66,10 +65,7 @@ def get_product(entries: Tuple[int, ...]) -> int:
 
 
 if __name__ == '__main__':
-    url = 'https://adventofcode.com/2020/day/1/input'
-    cookie_file = join(dirname(dirname(__file__)), 'cookies.txt')
-    cookies = read_cookies_from_file(cookie_file)
-    data = list(get_dataset_from_url(url, cookies))
+    data = get_aoc_data_for_challenge(__file__)
 
     result = get_product_of_entries(data)
     print(result)  # 987339

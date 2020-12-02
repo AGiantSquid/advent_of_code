@@ -2,11 +2,10 @@
 '''
 Solves Advent of Code problem for day 2.
 '''
-from os.path import join, dirname
 from collections import Counter
 from typing import List
 
-from aoc_utils import get_dataset_from_url, read_cookies_from_file
+from aoc_utils import get_aoc_data_for_challenge
 
 
 def password_checker_range(passwords: List[str]) -> int:
@@ -43,10 +42,7 @@ def password_checker_index(passwords: List[str]) -> int:
 
 
 if __name__ == '__main__':
-    url = 'https://adventofcode.com/2020/day/2/input'
-    cookie_file = join(dirname(dirname(__file__)), 'cookies.txt')
-    cookies = read_cookies_from_file(cookie_file)
-    data = list(get_dataset_from_url(url, cookies))
+    data = get_aoc_data_for_challenge(__file__)
 
     result = password_checker_range(data)
     print(result)  # 474

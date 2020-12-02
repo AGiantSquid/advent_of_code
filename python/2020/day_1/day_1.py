@@ -24,11 +24,16 @@ def get_product_of_entries_three(nums: List[str]) -> int:
 def find_2020_entries(nums: List[str]) -> Tuple[int, int]:
     '''Get the pair of elements that sum to 2020.'''
     nums_as_ints = [int(_) for _ in nums]
+    sorted_ints = sorted(nums_as_ints)
 
-    for i, num in enumerate(nums_as_ints):
-        for i2, num2 in enumerate(nums_as_ints):
-            if i != i2 and num + num2 == 2020:
-                return num, num2
+    for i, num in enumerate(sorted_ints):
+        for i2, num2 in enumerate(sorted_ints):
+            if i != i2:
+                sum_of_entries = num + num2
+                if sum_of_entries == 2020:
+                    return num, num2
+                if sum_of_entries > 2020:
+                    break
 
     raise IOError('Input data does not contain numbers that match criteria')
 
@@ -36,12 +41,21 @@ def find_2020_entries(nums: List[str]) -> Tuple[int, int]:
 def find_2020_entries_three(nums: List[str]) -> Tuple[int, int, int]:
     '''Get the 3 elements that sum to 2020.'''
     nums_as_ints = [int(_) for _ in nums]
+    sorted_ints = sorted(nums_as_ints)
 
-    for i, num in enumerate(nums_as_ints):
-        for i2, num2 in enumerate(nums_as_ints):
-            for i3, num3 in enumerate(nums_as_ints):
-                if i != i2 and i != i3 and i2 != i3 and num + num2 + num3 == 2020:
-                    return num, num2, num3
+    for i, num in enumerate(sorted_ints):
+        for i2, num2 in enumerate(sorted_ints):
+            if i != i2:
+                first_sum = num + num2
+                if first_sum > 2020:
+                    break
+                for i3, num3 in enumerate(sorted_ints):
+                    if i != i3 and i2 != i3:
+                        second_sum = first_sum + num3
+                        if second_sum == 2020:
+                            return num, num2, num3
+                        if second_sum > 2020:
+                            break
 
     raise IOError('Input data does not contain numbers that match criteria')
 
@@ -56,10 +70,9 @@ if __name__ == '__main__':
     cookie_file = join(dirname(dirname(__file__)), 'cookies.txt')
     cookies = read_cookies_from_file(cookie_file)
     data = list(get_dataset_from_url(url, cookies))
-    result = get_product_of_entries(data)
 
+    result = get_product_of_entries(data)
     print(result)  # 987339
 
-    result = get_product_of_entries_three(data)
-
-    print(result)  # 259521570
+    result_2 = get_product_of_entries_three(data)
+    print(result_2)  # 259521570

@@ -1,2 +1,2 @@
-# advent_of_code [![Build Status](https://travis-ci.org/AGiantSquid/advent_of_code.svg?branch=master)](https://travis-ci.org/AGiantSquid/advent_of_code)
+# advent_of_code ![example workflow name](https://github.com/AGiantSquid/advent_of_code/workflows/Run%20Tests/badge.svg)
 fun exercises for code

@@ -1,4 +1,4 @@
-EXPECTED_PAYLOAD = """luojygedpvsthptkxiwnaorzmq
+luojygedpvsthptkxiwnaorzmq
 lucjqgedppsbhftkxiwnaorlmq
 lucjmgefpvsbhftkxiwnaorziq
 lucjvgedpvsbxftkxiwpaorzmq
@@ -248,4 +248,3 @@ ldcjdgedpvsbhftkxiwnavrzmq
 lucjymedmvsbhqtkxiwnaorzmq
 lucjygedpvabhftkxiwnasrlmq
 lucjygefpvsbhftkxmwnaorkmq
-"""

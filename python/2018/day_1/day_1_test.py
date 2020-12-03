@@ -2,11 +2,11 @@ from os.path import join, dirname, abspath
 
 import pytest
 
-from aoc_utils import get_data_from_file, get_data_list
+from aoc_utils import get_aoc_data_for_challenge
 from day_1 import get_end_frequency, get_repeated_frequency
 
-DATA_FILE = join(dirname(abspath(__file__)), 'data.txt')
-EXPECTED_FREQUENCY_LIST = get_data_list(get_data_from_file(DATA_FILE))
+
+EXPECTED_FREQUENCY_LIST = get_aoc_data_for_challenge(__file__)
 
 
 def test_get_end_frequency():
@@ -34,7 +34,6 @@ def test_get_repeated_frequency_example_2():
     assert result == 10
 
 
-@pytest.mark.slow
 def test_get_repeated_frequency_real_data():
     result = get_repeated_frequency(EXPECTED_FREQUENCY_LIST)
     assert result == 566

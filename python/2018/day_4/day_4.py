@@ -14,8 +14,7 @@ def split_on_nth_char(source, n, char):
     return char.join(divided[:n]), divided[n]
 
 
-def get_product_of_guard_id_and_minute(data):
-    '''Find the guard most likely to sleep and multiply their id by the minute they sleep the most.'''
+def get_guard_dict(data):
     new_data = [split_on_nth_char(el, 2, ' ') for el in data]
 
     sorted_data = sorted(new_data, key=lambda x: x[0])
@@ -42,6 +41,13 @@ def get_product_of_guard_id_and_minute(data):
                 guard_dict[curr_guard]['sleep_mins'].append(i)
                 guard_dict[curr_guard]['total'] += 1
 
+    return guard_dict
+
+
+def get_product_of_guard_id_and_minute(data):
+    '''Find the guard most likely to sleep and multiply their id by the minute they sleep the most.'''
+    guard_dict = get_guard_dict(data)
+
     max_sleeper = max(guard_dict, key=lambda x: guard_dict[x]['total'])
     c = Counter(guard_dict[max_sleeper]['sleep_mins'])
     most_common_minute = max(c, key=lambda x: c[x])
@@ -49,8 +55,28 @@ def get_product_of_guard_id_and_minute(data):
     return int(max_sleeper[1:]) * most_common_minute
 
 
+def get_product_of_guard_id_and_minute_2(data):
+    '''Find the guard most likely to sleep and multiply their id by the minute they sleep the most.'''
+    guard_dict = get_guard_dict(data)
+
+    for k, v in guard_dict.items():
+        c = Counter(v['sleep_mins'])
+        if c:
+            max_min = max(c, key=lambda x: c[x])
+            guard_dict[k]['max_min'] = [c[max_min], max_min]
+        else:
+            guard_dict[k]['max_min'] = [0, 0]
+
+    max_minute_holder = max(guard_dict, key=lambda x: guard_dict[x]['max_min'][0])
+
+    return int(max_minute_holder[1:]) * guard_dict[max_minute_holder]['max_min'][1]
+
+
 if __name__ == '__main__':
     data = get_aoc_data_for_challenge(__file__)
 
     overlaps = get_product_of_guard_id_and_minute(data)
     print(overlaps)  # 36898
+
+    max_minute_sleeper = get_product_of_guard_id_and_minute_2(data)
+    print(max_minute_sleeper)  # 36898

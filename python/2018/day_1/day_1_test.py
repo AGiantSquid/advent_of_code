@@ -1,26 +1,16 @@
+from os.path import join, dirname, abspath
+
 import pytest
 
-from day_1_a import get_dataset_from_url, get_end_frequency
-from day_1_b import get_repeated_frequency
-from day_1_test_data import EXPECTED_PAYLOAD
+from aoc_utils import get_data_from_file, get_data_list
+from day_1 import get_end_frequency, get_repeated_frequency
 
-
-class MockResponse:
-  def __init__(self, expected_payload):
-    self.text = expected_payload
-
-
-class MockRequests:
-    """Mock class to make GET request."""
-    def get(self, url, cookies):
-        return MockResponse(EXPECTED_PAYLOAD)
-
-
-EXPECTED_FREQUENCY_LIST = get_dataset_from_url('some url', 'some cookies', MockRequests())
+DATA_FILE = join(dirname(abspath(__file__)), 'data.txt')
+EXPECTED_FREQUENCY_LIST = get_data_list(get_data_from_file(DATA_FILE))
 
 
 def test_get_end_frequency():
-    """Sum numbers together to get result frequency."""
+    '''Sum numbers together to get result frequency.'''
     frequency_changes = ["+1", "-2", "+3", "+1"]
     result = get_end_frequency(frequency_changes)
     assert result == 3
@@ -51,5 +41,5 @@ def test_get_repeated_frequency_real_data():
 
 
 if __name__ == '__main__':
-  import sys
-  pytest.main(sys.argv)
+    import sys
+    pytest.main(sys.argv)

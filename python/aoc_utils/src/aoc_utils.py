@@ -10,7 +10,7 @@ import requests as requests_module
 ADVENT_URL = Template('https://adventofcode.com/$year/day/$day/input')
 
 
-def get_aoc_data_for_challenge(target_file):
+def get_aoc_data_for_challenge(target_file, filter_nulls=True):
     '''Get data from aoc website, cache it locally, and return it.
 
     Use the path of the source project file to determine the day and year
@@ -25,7 +25,7 @@ def get_aoc_data_for_challenge(target_file):
     # check if file exists already
     if isfile(data_file_path):
         data = get_data_from_file(data_file_path)
-        return get_data_list(data)
+        return get_data_list(data, filter_nulls)
 
     year = basename(year_project_file)
     day = basename(day_project_file).split('_')[1]
@@ -40,7 +40,7 @@ def get_aoc_data_for_challenge(target_file):
     with open(data_file_path, 'w') as f:
         f.write(data)
 
-    return get_data_list(data)
+    return get_data_list(data, filter_nulls)
 
 
 def get_data_from_file(file_path: str) -> str:
@@ -50,9 +50,15 @@ def get_data_from_file(file_path: str) -> str:
     return data
 
 
-def get_data_list(data):
+def get_data_list(data, filter_nulls=True):
     '''Split data on newlines, and return non-Null values.'''
+    split_data = data.split('\n')
+
+    if not filter_nulls:
+        return list(split_data)
+
     return list(filter(None, data.split('\n')))
+
 
 
 def get_input_url(year: str, day: str) -> str:

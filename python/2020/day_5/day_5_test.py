@@ -1,5 +1,5 @@
 from aoc_utils import get_aoc_data_for_challenge
-from day_5 import get_row_column, get_seat_id, highest_id
+from day_5 import get_row_column, get_seat_id, highest_id, find_missing_middle_seat
 
 
 PUZZLE_DATA = get_aoc_data_for_challenge(__file__, filter_nulls=False)
@@ -31,3 +31,8 @@ def test_highest_id():
 def test_highest_id_pd():
     res = highest_id(PUZZLE_DATA)
     assert res == 928
+
+
+def test_find_missing_middle_seat():
+    res = find_missing_middle_seat(PUZZLE_DATA)
+    assert res == 610

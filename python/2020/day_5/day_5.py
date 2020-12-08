@@ -58,11 +58,20 @@ def get_bottom_top(low: int, high: int) -> Tuple[Tuple[int, int], ...]:
     return ((low, low + half), (high - half, high))
 
 
+def find_missing_middle_seat(data: str) -> int:
+    all_ids = sorted([get_seat_id(_) for _ in data])
+    all_ids_set = set(all_ids)
+
+    for i in range(all_ids[0], all_ids[-1]):
+        if i not in all_ids_set:
+            return i
+
+
 if __name__ == '__main__':
     puzzle_data = get_aoc_data_for_challenge(__file__)
 
     result = highest_id(puzzle_data)
     print(result)  # 928
 
-    result = highest_id(puzzle_data)
-    print(result)  # 928
+    result = find_missing_middle_seat(puzzle_data)
+    print(result)  # 610

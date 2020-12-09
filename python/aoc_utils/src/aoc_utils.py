@@ -8,6 +8,7 @@ import requests as requests_module
 
 
 ADVENT_URL = Template('https://adventofcode.com/$year/day/$day/input')
+FILE_SAVED_EARLY_MSG = "Please don't repeatedly request this endpoint before it unlocks!"
 
 
 def get_aoc_data_for_challenge(target_file, filter_nulls=True):
@@ -25,7 +26,8 @@ def get_aoc_data_for_challenge(target_file, filter_nulls=True):
     # check if file exists already
     if isfile(data_file_path):
         data = get_data_from_file(data_file_path)
-        return get_data_list(data, filter_nulls)
+        if not data.startswith(FILE_SAVED_EARLY_MSG):
+            return get_data_list(data, filter_nulls)
 
     year = basename(year_project_file)
     day = basename(day_project_file).split('_')[1]
@@ -37,6 +39,9 @@ def get_aoc_data_for_challenge(target_file, filter_nulls=True):
 
     data = get_dataset_from_url(url, cookies)
 
+    if data.startswith(FILE_SAVED_EARLY_MSG):
+        print('Its too early to get the puzzle data!')
+
     with open(data_file_path, 'w') as f:
         f.write(data)
 
@@ -46,7 +51,7 @@ def get_aoc_data_for_challenge(target_file, filter_nulls=True):
 def get_data_from_file(file_path: str) -> str:
     '''Read data from file and return.'''
     with open(file_path, 'r') as f:
-        data = f.read().strip()
+        data = f.read().rstrip()
     return data
 
 
@@ -69,9 +74,10 @@ def get_input_url(year: str, day: str) -> str:
 
 def get_dataset_from_url(url, cookies, requests=requests_module):
     '''Get request to url with cookies for user data.'''
+    print('Getting data from Advent of Code')
     resp = requests.get(
         url,
         cookies=dict(cookies_are=cookies)
     )
 
-    return resp.text
+    return resp.text.rstrip()

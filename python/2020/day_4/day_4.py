@@ -4,9 +4,9 @@ Solves Advent of Code problem for day 4.
 '''
 import re
 from functools import reduce
-from typing import List
+from typing import List, Callable
 
-from aoc_utils import get_aoc_data_for_challenge
+from aoc_utils import get_aoc_data_for_challenge, chunk_aoc_data
 
 
 def range_validator(low, high):
@@ -77,32 +77,14 @@ def valid_passport_2(passport: dict) -> bool:
     ])
 
 
-def valid_passport_count(data: List[str], validator: callable) -> int:
-    def reducer(accum, el):
-        if not accum:
-            d = to_dict(el)
-            return (d,)
+def valid_passport_count(data: List[str], validator: Callable[[dict], bool]) -> int:
+    chunked = chunk_aoc_data(data)
 
-        if not el:
-            return accum + ({},)
+    joined = (' '.join(_) for _ in chunked)
 
-        last_el = accum[-1]
-
-        if not last_el:
-            return accum[:-1] + (to_dict(el),)
-
-        thing = {
-            **last_el,
-            **to_dict(el),
-        }
-
-        return accum[:-1] + (thing,)
-
-    passport_data = reduce(reducer, data, tuple())
+    passport_data = (to_dict(_) for _ in joined)
 
     return len([_ for _ in passport_data if validator(_)])
-
-
 
 
 if __name__ == '__main__':

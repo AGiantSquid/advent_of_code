@@ -2,7 +2,7 @@
 Demonstrates that code works for day 8.
 '''
 from aoc_utils import get_aoc_data_for_challenge
-from day_8 import get_total_at_repeat
+from day_8 import get_total_at_repeat, get_total
 
 PUZZLE_DATA = get_aoc_data_for_challenge(__file__, filter_nulls=False)
 
@@ -27,3 +27,13 @@ def test_get_total_at_repeat():
 def test_get_total_at_repeat_pd():
     res = get_total_at_repeat(PUZZLE_DATA)
     assert res == 1487
+
+
+def test_get_total():
+    res = get_total(data)
+    assert res == 8
+
+
+def test_get_total_pd():
+    res = get_total(PUZZLE_DATA)
+    assert res == 1607

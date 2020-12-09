@@ -41,6 +41,7 @@ def get_aoc_data_for_challenge(target_file, filter_nulls=True):
 
     if data.startswith(FILE_SAVED_EARLY_MSG):
         print('Its too early to get the puzzle data!')
+        return
 
     with open(data_file_path, 'w') as f:
         f.write(data)

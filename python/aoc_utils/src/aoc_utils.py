@@ -1,8 +1,10 @@
 '''
 Utility functions to help with Advent of Code.
 '''
+from functools import reduce
 from os.path import join, dirname, basename, isfile
 from string import Template
+from typing import List, Tuple
 
 import requests as requests_module
 
@@ -11,7 +13,7 @@ ADVENT_URL = Template('https://adventofcode.com/$year/day/$day/input')
 FILE_SAVED_EARLY_MSG = "Please don't repeatedly request this endpoint before it unlocks!"
 
 
-def get_aoc_data_for_challenge(target_file, filter_nulls=True):
+def get_aoc_data_for_challenge(target_file, filter_nulls=True) -> List[str]:
     '''Get data from aoc website, cache it locally, and return it.
 
     Use the path of the source project file to determine the day and year
@@ -56,7 +58,7 @@ def get_data_from_file(file_path: str) -> str:
     return data
 
 
-def get_data_list(data, filter_nulls=True):
+def get_data_list(data, filter_nulls=True) -> List[str]:
     '''Split data on newlines, and return non-Null values.'''
     split_data = data.split('\n')
 
@@ -82,3 +84,21 @@ def get_dataset_from_url(url, cookies, requests=requests_module):
     )
 
     return resp.text.rstrip()
+
+
+def chunk_aoc_data(data: List[str], separator='') -> Tuple[Tuple, ...]:
+    '''Return data grouped together, as determined by separator.'''
+    def reducer(accum, el):
+        if el == separator:
+            return (*accum, None)
+
+        last_chunk = accum[-1]
+
+        if last_chunk is None:
+            updated_last_chunk = (el,)
+        else:
+            updated_last_chunk = (*last_chunk, el)
+
+        return (*accum[:-1], updated_last_chunk)
+
+    return reduce(reducer, data, (None,))

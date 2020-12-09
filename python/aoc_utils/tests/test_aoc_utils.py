@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import pytest
 
-from aoc_utils import get_dataset_from_url, get_input_url
+from aoc_utils import get_dataset_from_url, get_input_url, chunk_aoc_data
 from test_data import EXPECTED_PAYLOAD
 
 
@@ -23,8 +23,7 @@ EXPECTED_FREQUENCY_LIST = '''-5
 -2
 +1
 +14
-+7
-'''
++7'''
 
 
 def test_get_dataset_from_url():
@@ -38,6 +37,55 @@ def test_get_input_url():
     day = '12'
     res = get_input_url(year, day)
     assert res == 'https://adventofcode.com/2018/day/12/input'
+
+
+def test_chunk_aoc_data():
+    aoc_data = [
+        'first',
+        'group',
+        'here',
+        '',
+        'new',
+        'group',
+        '',
+        'last',
+        'group',
+        'of',
+        'words',
+    ]
+
+    expected = (
+        ('first', 'group', 'here'),
+        ('new', 'group'),
+        ('last', 'group', 'of', 'words'),
+    )
+    chunked = chunk_aoc_data(aoc_data)
+    assert chunked == expected
+
+
+def test_chunk_aoc_data_2():
+    aoc_data = [
+        'first',
+        'group',
+        'here',
+        '##',
+        'new',
+        'group',
+        '##',
+        'last',
+        'group',
+        'of',
+        '',
+        'words',
+    ]
+
+    expected = (
+        ('first', 'group', 'here'),
+        ('new', 'group'),
+        ('last', 'group', 'of', '', 'words'),
+    )
+    chunked = chunk_aoc_data(aoc_data, separator='##')
+    assert chunked == expected
 
 
 if __name__ == '__main__':

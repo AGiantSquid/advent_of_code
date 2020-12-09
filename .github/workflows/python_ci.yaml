@@ -25,6 +25,7 @@ jobs:
     - name: Test with pytest
       run: |
         cd python
+        pytest aoc_utils
         pytest 2017
         pytest 2018
         pytest 2020

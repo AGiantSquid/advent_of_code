@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 '''
 Create a module for a Advent of Code challenge.
 '''

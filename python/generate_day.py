@@ -18,15 +18,26 @@ from typing import List
 from aoc_utils import get_aoc_data_for_challenge
 
 
-def function(data: List[str]):
+def part_1(data: List[str]):
+    pass
+
+
+def part_2(data: List[str]):
     pass
 
 
 if __name__ == '__main__':
     puzzle_data = get_aoc_data_for_challenge(__file__, filter_nulls=False)
 
-    result = function(puzzle_data)
+    puzzle_data = [
+
+    ]
+
+    result = part_1(puzzle_data)
     print(result)
+
+#    result = part_2(puzzle_data)
+#    print(result)
 """)
 
 TEST_FILE_TEMPLATE = Template("""\
@@ -34,22 +45,22 @@ TEST_FILE_TEMPLATE = Template("""\
 Demonstrates that code works for day $day_number.
 '''
 from aoc_utils import get_aoc_data_for_challenge
-from day_$day_number import function
+from day_$day_number import part_1, part_2
 
 PUZZLE_DATA = get_aoc_data_for_challenge(__file__, filter_nulls=False)
 
-data = [
+DATA = [
 
 ]
 
 
-def test_function():
-    res = function(data)
+def test_part_1():
+    res = part_1(DATA)
     assert res == 0
 
 
-# def test_function_pd():
-#     res = function(PUZZLE_DATA)
+# def test_part_2_pd():
+#     res = part_2(PUZZLE_DATA)
 #     assert res == 0
 """)
 

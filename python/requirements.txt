@@ -1,3 +1,4 @@
 pytest>=3.8.1
 requests==2.20.1
 -e ./aoc_utils
+-e git://github.com/AGiantSquid/python_utilities.git#egg=python-utils

@@ -36,8 +36,8 @@ if __name__ == '__main__':
     result = part_1(puzzle_data)
     print(result)
 
-#    result = part_2(puzzle_data)
-#    print(result)
+    # result = part_2(puzzle_data)
+    # print(result)
 """)
 
 TEST_FILE_TEMPLATE = Template("""\
@@ -57,6 +57,16 @@ DATA = [
 def test_part_1():
     res = part_1(DATA)
     assert res == 0
+
+
+# def test_part_1_pd():
+#     res = part_1(PUZZLE_DATA)
+#     assert res == 0
+
+
+# def test_part_2():
+#     res = part_2(DATA)
+#     assert res == 0
 
 
 # def test_part_2_pd():

@@ -1,6 +1,8 @@
 '''
 Demonstrates that code works for day 16.
 '''
+import pytest
+
 from aoc_utils import get_aoc_data_for_challenge
 from day_16 import part_1, part_2
 
@@ -32,11 +34,11 @@ def test_part_1_pd():
     assert res == 24021
 
 
-# def test_part_2():
-#     res = part_2(DATA)
-#     assert res == 0
+def test_part_2_pd():
+    res = part_2(PUZZLE_DATA)
+    assert res == 1289178686687
 
 
-# def test_part_2_pd():
-#     res = part_2(PUZZLE_DATA)
-#     assert res == 0
+if __name__ == '__main__':
+    import sys
+    pytest.main(sys.argv)

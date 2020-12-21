@@ -44,6 +44,8 @@ TEST_FILE_TEMPLATE = Template("""\
 '''
 Demonstrates that code works for day $day_number.
 '''
+import pytest
+
 from aoc_utils import get_aoc_data_for_challenge
 from day_$day_number import part_1, part_2
 
@@ -72,6 +74,11 @@ def test_part_1():
 # def test_part_2_pd():
 #     res = part_2(PUZZLE_DATA)
 #     assert res == 0
+
+
+if __name__ == '__main__':
+    import sys
+    pytest.main(sys.argv)
 """)
 
 
